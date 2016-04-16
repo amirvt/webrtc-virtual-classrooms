@@ -52,7 +52,7 @@ class ChatBox extends Component {
 
     render() {
         return (
-            <Panel title="Chat Area">
+            <Panel title="Chat Area" style={{margin: "20px"}}>
                 <List style={{"overflowY": "scroll", height: "300px"}}>
                     {this.renderChatMessages()}
                 </List>

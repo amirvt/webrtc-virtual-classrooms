@@ -1,29 +1,25 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 
 
-import Toolbar from 'material-ui/lib/toolbar/toolbar'
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title'
+import AppBar from 'material-ui/lib/app-bar'
 import Paper from 'material-ui/lib/paper'
 
 
-
 class Panel extends Component {
-    render(){
-        let _style = this.props.style || {};
-        _style.margin = "10px";
-        
+    render() {
+
         return (
-            <Paper zDepth={1} style={_style}>
-                <Toolbar>
-                    <ToolbarGroup  float="left">
-                        <ToolbarTitle text={this.props.title}/>
-                    </ToolbarGroup>
-                </Toolbar>
+            <Paper zDepth={1} style={this.props.style}>
+                <AppBar title={this.props.title}/>
                 {this.props.children}
             </Paper>
         )
     }
 }
+
+Panel.propTypes = {
+    title: PropTypes.string,
+    style: PropTypes.object
+};
 
 export default Panel
