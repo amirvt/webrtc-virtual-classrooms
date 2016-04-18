@@ -5,6 +5,8 @@ import VideoBox from './VideoBox'
 import ChatBox from './ChatBox'
 import MyToolBar from './MyToolBar'
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme'
+import Store from '../store';
+import {Provider} from 'react-redux'
 import * as Color from 'material-ui/lib/styles/colors'
 import MyMuiTheme from '../MyMuiTheme'
 
@@ -17,16 +19,16 @@ class App extends Component {
         };
     }
 
-
-
     render() {
         return (
-            <div>
-                <MyToolBar/>
-                <VideoBox/>
-                <UserList/>
-                <ChatBox/>
-            </div>
+            <Provider store={Store}>
+                <div>
+                    <MyToolBar/>
+                    <VideoBox/>
+                    <UserList/>
+                    <ChatBox/>
+                </div>
+            </Provider>
         )
     }
 }
