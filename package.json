@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "kurento-utils": "^6.2.0",
+    "kurento-utils": "github:kurento/kurento-utils-js#master",
     "material-ui": "^0.14.2",
     "meteor-node-stubs": "~0.2.0",
     "react": "0.14.8",
