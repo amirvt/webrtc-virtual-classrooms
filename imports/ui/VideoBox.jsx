@@ -1,54 +1,46 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Panel from './misc/Panel.jsx'
-import kurentoUtils from 'kurento-utils'
+
+// import {Erizo} from '../licode/erizo'
+//let Erizo = require('../licode/erizo.js')
 const mapStateToProps = (state) => {
     return {
-        broadcastMode: state.broadcastMode
+        broadcastMode: state.broadcastMode,
+        user: state.user
     }
 };
 
-let videoTag;
-
-const  presenter = () => {
-    let options =  {
-        localVideo: videoTag,
-        onicecandidate: onIceCandidate
-    };
-
-    webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, (error) => {
-        if(error) alert(error);
-
-        //this.generateOffer(onOfferPresenter);
-    });
-};
-
-function onIceCandidate(candidate) {
-    //console.log('Local candidate' + JSON.stringify(candidate));
-
-    // var message = {
-    //     id : 'onIceCandidate',
-    //     candidate : candidate
-    // };
-    // sendMessage(message);
-}
 
 class VideoBox extends Component {
     componentDidUpdate() {
-        if(this.props.broadcastMode === "VIDEO") {
-            presenter()
+        if (this.props.broadcastMode === "VIDEO") {
+            let broadcastStream = Erizo.Stream({
+                audio: true,
+                video: true,
+                data: false,
+                attributes: {
+                    name: 'broadcastStream'
+                }
+            });
+            broadcastStream.init();
+            broadcastStream.addEventListener('access-accepted', () => {
+                broadcastStream.play('video', {crop: false})
+            });
+            broadcastStream.addEventListener('access-denied', () => {
+                alert('Access to webcam and microphone rejected')
+            })
+
         }
     }
 
-    render(){
+    render() {
         return (
             <Panel title={this.props.broadcastMode === "VIDEO" ? "WEBCAM ON" : "WEBCAM OFF"}>
-                <video id="video"
-                       autoPlay
-                       width="640px"
-                       height="480px"
-                       ref={node => {videoTag = node}}
-                />
+                <div id="video"
+                     style={{width:"640px",
+                       height:"480px"}}
+                ></div>
             </Panel>
         )
     }
