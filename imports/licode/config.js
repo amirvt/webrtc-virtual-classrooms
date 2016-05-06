@@ -1,6 +1,6 @@
 const config = {};
 
-config.nuve_host = 'http:192.168.1.8';
+config.nuve_host = 'http://192.168.1.6:3000/';
 config.service = {};
 config.service.id ='572605b042608f698b99834b';
 config.service.key = '7975';

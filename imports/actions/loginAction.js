@@ -1,9 +1,9 @@
-export default function loginAction(meetingId, userId) {
+export default function loginAction(roomName, username) {
+    console.log(roomName + ' ' + username);
     return {
         type: "LOGIN",
-        user: {
-            meetingId,
-            userId
-        }
+        roomName,
+        username
+
     }
 }

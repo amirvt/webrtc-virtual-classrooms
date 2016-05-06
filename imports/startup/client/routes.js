@@ -9,8 +9,8 @@ import Login from '../../ui/Login.jsx'
 export const renderRoutes = () => (
     <Provider store={Store}>
         <Router history={browserHistory}>
-            <Route path="/:meetingId:userId" component={App}/>
-            <Route path="/" component={Login}/>
+            <Route path="/client" component={App}/>
+            <Route path="/" component={App}/>
         </Router>
     </Provider>
 );

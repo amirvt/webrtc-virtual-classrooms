@@ -4,45 +4,50 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import TextField from 'material-ui/lib/text-field'
 import {connect} from 'react-redux'
 import { browserHistory } from 'react-router'
+import loginAction from '../actions/loginAction'
+
 
 class LoginForm extends Component {
 
 constructor(props){
     super(props);
     this.state = {
-        userId: "",
-        meetingId: ""
+        username: "",
+        roomName: ""
     }
 }
 
     handleChange(event) {
-        console.log(event.target.value);
-        this.setState({userId: event.target.value});
+        this.setState({username: event.target.value});
     }
 
     handleMeetingChange(event) {
-        console.log(event.target.value);
-        this.setState({meetingId: event.target.value});
+        this.setState({roomName: event.target.value});
     }
 
     handleSubmit() {
-        //this.props.dispacth(loginAction(this.state.meetingId, this.state.userId));
-        console.log('logging in...')
-        browserHistory.push(`/:${this.state.meetingId}:${this.state.userId}`);
+        console.log('logging in...');
+        this.props.dispatch(
+            loginAction(
+                this.state.roomName,
+                this.state.username
+            )
+        );
+        //browserHistory.push(`/client`);
     };
 
     render() {
 
         return (
             <div>
-                <TextField hintText="User Id" onChange={this.handleChange.bind(this)}/>
+                <TextField hintText="Username" onChange={this.handleChange.bind(this)}/>
                 <br/>
-                <TextField hintText="Meeting Id" onChange={this.handleMeetingChange.bind(this)}/>
+                <TextField hintText="Room Name" onChange={this.handleMeetingChange.bind(this)}/>
                 <br/>
                 <FlatButton
                     label="Submit"
                     primary={true}
-                    keyboardFocused={true}
+                    //keyboardFocused={true}
                     onMouseUp={this.handleSubmit.bind(this)}
                 />
             </div>
@@ -50,4 +55,4 @@ constructor(props){
     }
 }
 
-export default LoginForm
+export default connect()(LoginForm)

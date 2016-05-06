@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
-// Inject.rawHead('erizo', '', [res])
+import '../imports/startup/server/index'
 
 Meteor.startup(() => {
-  // code to run on server at startup
+    Future = Npm.require('fibers/future');
 });

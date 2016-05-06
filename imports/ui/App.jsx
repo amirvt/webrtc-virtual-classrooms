@@ -1,38 +1,41 @@
 import React, {Component, PropTypes} from 'react'
+import {Meteor} from 'meteor/meteor'
 
 import UserList from './UserList'
 import VideoBox from './VideoBox'
 import ChatBox from './ChatBox'
 import MyToolBar from './MyToolBar'
+import Login from './Login.jsx'
+
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme'
 
-import loginAction from '../actions/loginAction'
+import setRoomTokenAction from '../actions/setRoomTokenAction'
 
 import {connect} from 'react-redux';
 import * as Color from 'material-ui/lib/styles/colors'
 import MyMuiTheme from '../MyMuiTheme'
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.props.dispatch(
-            loginAction(
-                this.props.params.meetingId,
-                this.props.params.userId
-            )
-        )
+let mapStateToProps = (state) => {
+    return {
+        roomName: state.loginReducer.roomName,
+        username: state.loginReducer.username
     }
+};
 
-    // componentDidMount () {
-    //     function loadScript() {
-    //         var script= document.createElement('script');
-    //         script.type= 'text/javascript';
-    //         script.src= '../licode/erizo.js';
-    //         script.async = true;
-    //         document.body.appendChild(script);
-    //     }
-    //     loadScript();
-    // }
+let mapDispatchToProps = (dispatch) => {
+    return {
+        setToken: (token) => {
+            dispatch(setRoomTokenAction(token))
+        }
+    }
+};
+
+
+class App extends Component {
+
+    
+
+
     getChildContext() {
         var newMuiTheme = getMuiTheme();
         //newMuiTheme.isRtl = true;
@@ -42,11 +45,15 @@ class App extends Component {
     }
 
     render() {
+        if(!this.props.username || !this.props.roomName) {
+            return <Login/>
+        }
+        
         return (
 
             <div>
                 <MyToolBar/>
-                <VideoBox/>
+                <VideoBox roomName={this.props.roomName} username={this.props.username}/>
                 <UserList/>
                 <ChatBox/>
             </div>
@@ -58,4 +65,4 @@ App.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
 
-export default connect()(App)
+export default connect( mapStateToProps, mapDispatchToProps)(App)
