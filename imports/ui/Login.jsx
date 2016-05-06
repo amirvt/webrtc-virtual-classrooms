@@ -27,12 +27,20 @@ constructor(props){
 
     handleSubmit() {
         console.log('logging in...');
-        this.props.dispatch(
-            loginAction(
-                this.state.roomName,
-                this.state.username
-            )
-        );
+        Meteor.call('getOrCreateRoom', this.props.roomName, this.props.username, "presenter", (error, token) => {
+            if (error) {
+                alert(error);
+                return
+            } 
+            this.props.dispatch(
+                loginAction(
+                    this.state.roomName,
+                    this.state.username,
+                    token
+                )
+            );
+        });
+        
         //browserHistory.push(`/client`);
     };
 

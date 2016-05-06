@@ -18,7 +18,8 @@ import MyMuiTheme from '../MyMuiTheme'
 let mapStateToProps = (state) => {
     return {
         roomName: state.loginReducer.roomName,
-        username: state.loginReducer.username
+        username: state.loginReducer.username,
+        token: state.loginReducer.token
     }
 };
 
@@ -33,8 +34,6 @@ let mapDispatchToProps = (dispatch) => {
 
 class App extends Component {
 
-    
-
 
     getChildContext() {
         var newMuiTheme = getMuiTheme();
@@ -44,16 +43,71 @@ class App extends Component {
         };
     }
 
+    subscribeToStreams(room, streams) {
+        for (stream of streams) {
+            let attributes = stream.getAttributes();
+            console.log(attributes);
+            switch (attributes.type) {
+                case "broadcastStream":
+                    if (attributes.user !== this.props.username) {
+                        room.subscribe(stream)
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
     render() {
-        if(!this.props.username || !this.props.roomName) {
+        if (!this.props.username || !this.props.roomName) {
             return <Login/>
         }
-        
+
+
+        // console.log(token);
+        // this.props.setToken(token); //TODO delete token action and reducer
+        let room = Erizo.Room({token: this.props.token});
+        room.connect();
+
+        room.addEventListener("room-connected", roomEvent => {
+            this.subscribeToStreams(room, roomEvent.streams);
+        });
+
+        room.addEventListener('stream-subscribed', streamEvent => {
+            let stream = streamEvent.stream;
+            let attributes = stream.getAttributes();
+            switch(attributes.type) {
+                case 'broadcastStream':
+                    stream.play('video');
+                    break;
+                default:
+                    console.log("Stream type " + attributes.type + " is incorrect.")
+                    break;
+            }
+        });
+
+        room.addEventListener('stream-added', streamEvent => {
+            let streams = [];
+            streams.push(streamEvent.stream);
+            this.subscribeToStreams(room, streams);
+        });
+
+        room.addEventListener('stream-removed', streamEvent => {
+            let stream = streamEvent.stream;
+            if (stream.elementID === 'video') {
+                //Do something about video element, maybe?
+            }
+        });
+
+        console.log("before render");
+        console.log(room);
         return (
 
             <div>
                 <MyToolBar/>
-                <VideoBox roomName={this.props.roomName} username={this.props.username}/>
+                <VideoBox room={room}/>
                 <UserList/>
                 <ChatBox/>
             </div>
@@ -65,4 +119,4 @@ App.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
 
-export default connect( mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -1,9 +1,9 @@
-export default function loginAction(roomName, username) {
+export default function loginAction(roomName, username, token) {
     console.log(roomName + ' ' + username);
     return {
         type: "LOGIN",
         roomName,
-        username
-
+        username,
+        token
     }
 }

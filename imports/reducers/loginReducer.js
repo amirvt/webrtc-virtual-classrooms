@@ -4,7 +4,8 @@ export default function LoginReducer(state = {}, action) {
         case "LOGIN":
             return {
                 username: action.username,
-                roomName: action.roomName
+                roomName: action.roomName,
+                token: action.token
             };
         default:
             return state;
