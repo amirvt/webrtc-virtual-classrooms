@@ -2,11 +2,15 @@
 var N = require('../licode/nuve.js');
 import {Meteor} from 'meteor/meteor'
 
-const errorCallback = (e) => console.log(e);
+//TODO better validation
+
+
 
 Meteor.methods({
     'getOrCreateRoom'(roomName, userName, role) {
-
+        if(!roomName || !userName || !role)
+            throw error();
+        
         var future = new Future();
 
         N.API.getRooms(function(roomList) {

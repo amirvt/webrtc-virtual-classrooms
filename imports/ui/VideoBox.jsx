@@ -3,8 +3,6 @@ import {connect} from 'react-redux'
 
 import Panel from './misc/Panel.jsx'
 
-// import {Erizo} from '../licode/erizo'
-//let Erizo = require('../licode/erizo.js')
 const mapStateToProps = (state) => {
     return {
         broadcastMode: state.broadcastMode,
@@ -13,8 +11,6 @@ const mapStateToProps = (state) => {
     }
 };
 
-//let broadcastStream;
-// let room;
 
 class VideoBox extends Component {
 
@@ -47,15 +43,12 @@ class VideoBox extends Component {
         this.broadcastStream.addEventListener('access-denied', () => {
             alert('Access to web cam and microphone rejected')
         });
-        // console.log("room::")
-        // console.log(this.props.room);
+
         this.props.room.publish(this.broadcastStream);
     }
 
 
     render() {
-
-
         return (
             <Panel title={this.props.broadcastMode === "VIDEO" ? "WEBCAM ON" : "WEBCAM OFF"}>
                 <div id="video"

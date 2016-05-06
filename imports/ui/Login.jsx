@@ -27,7 +27,7 @@ constructor(props){
 
     handleSubmit() {
         console.log('logging in...');
-        Meteor.call('getOrCreateRoom', this.props.roomName, this.props.username, "presenter", (error, token) => {
+        Meteor.call('getOrCreateRoom', this.state.roomName, this.state.username, "presenter", (error, token) => {
             if (error) {
                 alert(error);
                 return

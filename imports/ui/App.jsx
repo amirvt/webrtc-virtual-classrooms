@@ -46,14 +46,19 @@ class App extends Component {
     subscribeToStreams(room, streams) {
         for (stream of streams) {
             let attributes = stream.getAttributes();
-            console.log(attributes);
             switch (attributes.type) {
                 case "broadcastStream":
                     if (attributes.user !== this.props.username) {
                         room.subscribe(stream)
                     }
                     break;
+                case 'chatStream':
+                    if (attributes.user !== this.props.username) {
+                        room.subscribe(stream)
+                    }
+                    break;
                 default:
+                    console.error('incorrect room type: ' + attributes.type);
                     break;
             }
         }
@@ -77,6 +82,8 @@ class App extends Component {
 
         room.addEventListener('stream-subscribed', streamEvent => {
             let stream = streamEvent.stream;
+            // console.log("stream subscribed:");
+            // console.log(stream);
             let attributes = stream.getAttributes();
             switch(attributes.type) {
                 case 'broadcastStream':
@@ -89,8 +96,11 @@ class App extends Component {
         });
 
         room.addEventListener('stream-added', streamEvent => {
+
             let streams = [];
             streams.push(streamEvent.stream);
+            // console.log("stream added:");
+            // console.log(streams);
             this.subscribeToStreams(room, streams);
         });
 
@@ -109,7 +119,7 @@ class App extends Component {
                 <MyToolBar/>
                 <VideoBox room={room}/>
                 <UserList/>
-                <ChatBox/>
+                <ChatBox room={room} username={this.props.username}/>
             </div>
         )
     }
