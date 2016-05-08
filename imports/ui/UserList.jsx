@@ -32,8 +32,8 @@ class UserList extends Component {
 
     render() {
         return (
-            <Panel title="Current Users" style={{margin: "20px"}}>
-                <List style={{"overflowY": "scroll", height: "300px"}}>
+            <Panel title="Current Users" >
+                <List style={{"overflowY": "scroll"}}>
                     {this.renderUsers()}
                 </List>
             </Panel>

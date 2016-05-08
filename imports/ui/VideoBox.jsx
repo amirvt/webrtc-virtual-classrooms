@@ -6,28 +6,27 @@ import Panel from './misc/Panel.jsx'
 const mapStateToProps = (state) => {
     return {
         broadcastMode: state.broadcastMode,
-        // roomName: state.loginReducer.roomName,
-         username: state.loginReducer.username
+        username: state.loginReducer.username
     }
 };
 
+let broadcastStream;
 
 class VideoBox extends Component {
 
     constructor(props) {
         super(props);
-        this.broadcastStream = undefined;
+        this.addBroadcastListener()
     }
 
     componentDidUpdate() {
-        if (this.props.broadcastMode === "VIDEO") {
+        if (this.props.broadcastMode === "ON") {
             this.startBroadcastingWebCam();
-
         }
     }
 
     startBroadcastingWebCam() {
-        this.broadcastStream = Erizo.Stream({
+        broadcastStream = Erizo.Stream({
             audio: true,
             video: true,
             data: false,
@@ -36,31 +35,37 @@ class VideoBox extends Component {
                 user: this.props.username
             }
         });
-        this.broadcastStream.init();
-        this.broadcastStream.addEventListener('access-accepted', () => {
-            this.broadcastStream.play('video', {crop: false})
+        broadcastStream.init();
+        broadcastStream.addEventListener('access-accepted', () => {
+            broadcastStream.play('video', {crop: true})
         });
-        this.broadcastStream.addEventListener('access-denied', () => {
+        broadcastStream.addEventListener('access-denied', () => {
             alert('Access to web cam and microphone rejected')
         });
 
-        this.props.room.publish(this.broadcastStream);
+        this.props.room.publish(broadcastStream);
     }
 
 
+    addBroadcastListener() {
+        this.props.room.addEventListener('stream-subscribed', streamEvent => {
+            let stream = streamEvent.stream;
+            let attributes = stream.getAttributes();
+            if (attributes.type == 'broadcastStream')
+                stream.play('video', {crop: true});
+        });
+    }
+
     render() {
         return (
-            <Panel title={this.props.broadcastMode === "VIDEO" ? "WEBCAM ON" : "WEBCAM OFF"}>
-                <div id="video"
-                     style={{width:"640px",
-                       height:"480px"}}
-                ></div>
+            <Panel title="Video" >
+                <div id="video" style={{height: "80%"}}></div>
             </Panel>
         )
     }
 }
 
-VideoBox.PropType = {
+VideoBox.propTypes = {
     room: PropTypes.object
 };
 

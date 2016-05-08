@@ -7,7 +7,7 @@ import Divider from 'material-ui/lib/divider'
 class ChatMessages extends Component {
     render() {
         return (
-            <List style={{"overflowY": "scroll", height: "300px"}}>
+            <List >
                 {this.props.messages.map(msg => {
                         return (
                             <div>

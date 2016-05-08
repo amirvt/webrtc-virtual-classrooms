@@ -8,8 +8,11 @@ import MyToolBar from './MyToolBar'
 import Login from './Login.jsx'
 
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme'
+//import Snackbar from 'material-ui/Snackbar';
+import {Responsive, WidthProvider} from 'react-grid-layout';
+var ReactGridLayout = require('react-grid-layout');
+const RGL = WidthProvider(ReactGridLayout);
 
-import setRoomTokenAction from '../actions/setRoomTokenAction'
 
 import {connect} from 'react-redux';
 import * as Color from 'material-ui/lib/styles/colors'
@@ -24,14 +27,10 @@ let mapStateToProps = (state) => {
 };
 
 let mapDispatchToProps = (dispatch) => {
-    return {
-        setToken: (token) => {
-            dispatch(setRoomTokenAction(token))
-        }
-    }
+    return {}
 };
 
-
+let _room;
 class App extends Component {
 
 
@@ -69,59 +68,65 @@ class App extends Component {
         if (!this.props.username || !this.props.roomName) {
             return <Login/>
         }
+        this.setupRoom();
+
+        var layout = [
+            {i: 'ul', x: 0, y: 0, w: 4, h: 6},
+            {i: 'vb', x: 0, y: 6, w: 4, h: 6},
+            {i: 'sb', x: 4, y: 0, w: 4, h: 12},
+            {i: 'cb', x: 8, y: 0, w: 4, h: 12}
+        ];
 
 
-        // console.log(token);
-        // this.props.setToken(token); //TODO delete token action and reducer
-        let room = Erizo.Room({token: this.props.token});
-        room.connect();
+        //let _style = {width: "33%", float: "left", height: "800px"}
+        return (
+            <div>
+                <MyToolBar/>
 
-        room.addEventListener("room-connected", roomEvent => {
-            this.subscribeToStreams(room, roomEvent.streams);
+                <div style={{height: "100%"}}>
+                    <RGL className="layout" layout={layout}
+                         cols={12} rowHeight={50} width={1200}
+                         isDraggable={false} isResizable={false}>
+                        <div key={"ul"} style={{backgroundColor: "grey"}}>
+                            <UserList/>
+                        </div>
+                        <div key={"vb"} style={{backgroundColor: "grey"}}>
+                            <VideoBox room={_room}/>
+                        </div>
+                        <div key={"cb"} style={{backgroundColor: "grey"}}>
+                            <ChatBox room={_room} username={this.props.username}/>
+                        </div>
+                        <div key={"sb"} style={{backgroundColor: "grey"}}>
+
+                        </div>
+                    </RGL>
+                </div>
+            </div>
+        )
+    }
+
+    setupRoom() {
+        _room = Erizo.Room({token: this.props.token});
+        _room.connect();
+
+        _room.addEventListener("room-connected", roomEvent => {
+            this.subscribeToStreams(_room, roomEvent.streams);
         });
 
-        room.addEventListener('stream-subscribed', streamEvent => {
-            let stream = streamEvent.stream;
-            // console.log("stream subscribed:");
-            // console.log(stream);
-            let attributes = stream.getAttributes();
-            switch(attributes.type) {
-                case 'broadcastStream':
-                    stream.play('video');
-                    break;
-                default:
-                    console.log("Stream type " + attributes.type + " is incorrect.")
-                    break;
-            }
-        });
 
-        room.addEventListener('stream-added', streamEvent => {
-
+        _room.addEventListener('stream-added', streamEvent => {
             let streams = [];
             streams.push(streamEvent.stream);
-            // console.log("stream added:");
-            // console.log(streams);
-            this.subscribeToStreams(room, streams);
+            this.subscribeToStreams(_room, streams);
         });
 
-        room.addEventListener('stream-removed', streamEvent => {
+        _room.addEventListener('stream-removed', streamEvent => {
             let stream = streamEvent.stream;
             if (stream.elementID === 'video') {
                 //Do something about video element, maybe?
             }
         });
-
-        console.log("before render");
-        console.log(room);
-        return (
-
-            <div>
-                <MyToolBar/>
-                <VideoBox room={room}/>
-                <UserList/>
-                <ChatBox room={room} username={this.props.username}/>
-            </div>
-        )
+        return _room;
     }
 }
 
