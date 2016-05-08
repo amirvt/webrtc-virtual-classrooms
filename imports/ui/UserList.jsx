@@ -24,6 +24,7 @@ class UserList extends Component {
     renderUsers() {
         return this.getUsers().map(user => {
             return (
+
                 <ListItem primaryText={user.username}
                           rightIcon={<CommunicationChatBubble/>}/>
             )
@@ -32,10 +33,12 @@ class UserList extends Component {
 
     render() {
         return (
-            <Panel title="Current Users" >
-                <List style={{"overflowY": "scroll"}}>
-                    {this.renderUsers()}
-                </List>
+            <Panel title="Current Users" style={{margin: "0px"}}>
+                <div style={{"overflowY": "scroll", height: "80%"}}>
+                    <List >
+                        {this.renderUsers()}
+                    </List>
+                </div>
             </Panel>
         )
     }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import startBroadcast from '../actions/startBroadcast'
+import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 import Toolbar from 'material-ui/lib/toolbar/toolbar'
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
@@ -20,7 +20,11 @@ class MyToolBar extends Component {
     
     handleVideoCamTouchTap(event) {
         event.preventDefault();
-        this.props.dispatch(startBroadcast())
+        const {broadcastMode, dispatch} = this.props;
+        if(broadcastMode === "OFF")
+            dispatch(setVideoBroadcast("ON"));
+        else
+            dispatch(setVideoBroadcast("OFF"));
     }
 
     render() {
@@ -32,7 +36,8 @@ class MyToolBar extends Component {
                         <RaisedButton icon={<VideoCam/>} primary={true}
                                       onMouseUp={this.handleVideoCamTouchTap.bind(this)}/>
                         :
-                        <RaisedButton icon={<VideoCamOff/>} primary={true}/>
+                        <RaisedButton icon={<VideoCamOff/>} primary={true}
+                        onMouseUp={this.handleVideoCamTouchTap.bind(this)}/>
                     }
                     {broadcastMode === "OFF" ?
                         <RaisedButton icon={<ScreenShare/>} primary={true}/>

@@ -72,6 +72,12 @@ class ChatBox extends Component {
         this.setState({message: event.target.value})
     }
 
+    checkCtrlEnter(event) {
+        if(event.ctrlKey && event.keyCode == 13) {
+            this.sendMessage()
+        }
+    }
+
     render() {
 
 
@@ -88,7 +94,8 @@ class ChatBox extends Component {
                     <FloatingActionButton mini={true}
                                           style={{float: "right"}}
                                           onMouseUp={this.sendMessage.bind(this)}
-                                          onTouchEnd={this.sendMessage.bind(this)}>
+                                          onTouchEnd={this.sendMessage.bind(this)}
+                                            onKeyPress={this.checkCtrlEnter.bind(this)}>
                         <ContentAdd />
                     </FloatingActionButton>
                 </div>

@@ -80,27 +80,26 @@ class App extends Component {
 
         //let _style = {width: "33%", float: "left", height: "800px"}
         return (
-            <div>
+            <div >
                 <MyToolBar/>
 
-                <div style={{height: "100%"}}>
-                    <RGL className="layout" layout={layout}
-                         cols={12} rowHeight={50} width={1200}
-                         isDraggable={false} isResizable={false}>
-                        <div key={"ul"} style={{backgroundColor: "grey"}}>
-                            <UserList/>
-                        </div>
-                        <div key={"vb"} style={{backgroundColor: "grey"}}>
-                            <VideoBox room={_room}/>
-                        </div>
-                        <div key={"cb"} style={{backgroundColor: "grey"}}>
-                            <ChatBox room={_room} username={this.props.username}/>
-                        </div>
-                        <div key={"sb"} style={{backgroundColor: "grey"}}>
 
-                        </div>
-                    </RGL>
-                </div>
+                <RGL className="layout" layout={layout}
+                     cols={12} rowHeight={50} width={1200}
+                     isDraggable={false} isResizable={false}>
+                    <div key={"ul"} style={{backgroundColor: "grey"}}>
+                        <UserList/>
+                    </div>
+                    <div key={"vb"} style={{backgroundColor: "grey"}}>
+                        <VideoBox room={_room}/>
+                    </div>
+                    <div key={"cb"} style={{backgroundColor: "grey"}}>
+                        <ChatBox room={_room} username={this.props.username}/>
+                    </div>
+                    <div key={"sb"} style={{backgroundColor: "grey"}}>
+
+                    </div>
+                </RGL>
             </div>
         )
     }
@@ -113,7 +112,6 @@ class App extends Component {
             this.subscribeToStreams(_room, roomEvent.streams);
         });
 
-
         _room.addEventListener('stream-added', streamEvent => {
             let streams = [];
             streams.push(streamEvent.stream);
@@ -123,10 +121,9 @@ class App extends Component {
         _room.addEventListener('stream-removed', streamEvent => {
             let stream = streamEvent.stream;
             if (stream.elementID === 'video') {
-                //Do something about video element, maybe?
+                stream.stop();
             }
         });
-        return _room;
     }
 }
 

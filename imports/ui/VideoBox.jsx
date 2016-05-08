@@ -1,7 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
+
 import Panel from './misc/Panel.jsx'
+import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 const mapStateToProps = (state) => {
     return {
@@ -10,7 +12,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-let broadcastStream;
+let _broadcastStream;
 
 class VideoBox extends Component {
 
@@ -22,11 +24,17 @@ class VideoBox extends Component {
     componentDidUpdate() {
         if (this.props.broadcastMode === "ON") {
             this.startBroadcastingWebCam();
+        } else if(this.props.broadcastMode === "OFF" && _broadcastStream) {
+            _broadcastStream.stop();
+            this.props.room.unpublish(_broadcastStream, (result, error) => {
+                _broadcastStream.close();
+                _broadcastStream = null;
+            })
         }
     }
 
     startBroadcastingWebCam() {
-        broadcastStream = Erizo.Stream({
+        _broadcastStream = Erizo.Stream({
             audio: true,
             video: true,
             data: false,
@@ -35,15 +43,15 @@ class VideoBox extends Component {
                 user: this.props.username
             }
         });
-        broadcastStream.init();
-        broadcastStream.addEventListener('access-accepted', () => {
-            broadcastStream.play('video', {crop: true})
+        _broadcastStream.init();
+        _broadcastStream.addEventListener('access-accepted', () => {
+            _broadcastStream.play('video', {crop: true})
         });
-        broadcastStream.addEventListener('access-denied', () => {
-            alert('Access to web cam and microphone rejected')
+        _broadcastStream.addEventListener('access-denied', () => {
+            this.props.dispatch(setVideoBroadcast("OFF"))
         });
 
-        this.props.room.publish(broadcastStream);
+        this.props.room.publish(_broadcastStream);
     }
 
 
