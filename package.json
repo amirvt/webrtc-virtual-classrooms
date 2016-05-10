@@ -1,5 +1,5 @@
 {
-  "name": "hello",
+  "name": "webrtc-virtual-classrooms",
   "private": true,
   "scripts": {
     "start": "meteor run"
