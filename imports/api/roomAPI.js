@@ -21,22 +21,19 @@ Meteor.methods({
                 console.log(userName);
                 console.log(role);
                 N.API.createToken(room._id, userName, role, function(token) {
-
                     future["return"](token)
-                }, (e) => console.log("Error1: " + e));
+                }, (e) => {future.throw(e)})
             } else {
                 N.API.createRoom(roomName, function(room) {
                     N.API.createToken(room._id, userName, role, function(token) {
                         future["return"](token)
-                    }, (e) => console.log("Error2: " + e));
-                }, (e) => console.log("Error3: " + e));
+                    }, (e) => {future.throw(e)})
+                }, (e) => {future.throw(e)})
             }
-        }, (e) => console.log("Error4: " + e));
+        }, (e) => {future.throw(e)});
 
-        let res =  future.wait();
-        console.log(res);
-
-        return res;
+        return future.wait();
+        
 
     }
 });

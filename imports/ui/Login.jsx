@@ -31,7 +31,7 @@ constructor(props){
             if (error) {
                 alert(error);
                 return
-            } 
+            }
             this.props.dispatch(
                 loginAction(
                     this.state.roomName,
@@ -41,7 +41,6 @@ constructor(props){
             );
         });
         
-        //browserHistory.push(`/client`);
     };
 
     render() {

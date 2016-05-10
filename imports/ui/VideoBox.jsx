@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-
+import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 import Panel from './misc/Panel.jsx'
-import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 const mapStateToProps = (state) => {
     return {
@@ -59,8 +58,11 @@ class VideoBox extends Component {
         this.props.room.addEventListener('stream-subscribed', streamEvent => {
             let stream = streamEvent.stream;
             let attributes = stream.getAttributes();
-            if (attributes.type == 'broadcastStream')
+            if (attributes.type == 'broadcastStream') {
                 stream.play('video', {crop: true});
+                this.props.dispatch(setVideoBroadcast('RECEIVING'))
+            }
+                
         });
     }
 

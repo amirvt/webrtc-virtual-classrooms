@@ -1,6 +1,9 @@
 import {BROADCAST} from './actions'
 export default function TurnVideoBroadcast(type) {
-    return {
-        type: type === "ON" ? BROADCAST.START_VIDEO : BROADCAST.TURN_OFF
+    switch (type) {
+        case "ON": return {type: BROADCAST.START_VIDEO};
+        case "RECEIVING": return {type: BROADCAST.RECEIVING};
+        case "OFF": 
+        default: return {type: BROADCAST.TURN_OFF}; 
     }
 }

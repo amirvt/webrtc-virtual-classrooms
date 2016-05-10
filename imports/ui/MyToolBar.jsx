@@ -4,7 +4,7 @@ import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 import Toolbar from 'material-ui/lib/toolbar/toolbar'
 import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group'
-import RaisedButton from 'material-ui/lib/raised-button'
+import IconButton from 'material-ui/lib/raised-button'
 import VideoCam from 'material-ui/lib/svg-icons/av/videocam';
 import VideoCamOff from 'material-ui/lib/svg-icons/av/videocam-off';
 import ScreenShare from 'material-ui/lib/svg-icons/communication/screen-share';
@@ -17,13 +17,13 @@ const mapStateToProps = state => {
 };
 
 class MyToolBar extends Component {
-    
+
     handleVideoCamTouchTap(event) {
         event.preventDefault();
         const {broadcastMode, dispatch} = this.props;
-        if(broadcastMode === "OFF")
+        if (broadcastMode === "OFF")
             dispatch(setVideoBroadcast("ON"));
-        else
+        else if (broadcastMode === "ON")
             dispatch(setVideoBroadcast("OFF"));
     }
 
@@ -33,16 +33,22 @@ class MyToolBar extends Component {
             <Toolbar>
                 <ToolbarGroup firstChild={true} float="left">
                     {broadcastMode === "OFF" ?
-                        <RaisedButton icon={<VideoCam/>} primary={true}
-                                      onMouseUp={this.handleVideoCamTouchTap.bind(this)}/>
+                        <IconButton onMouseUp={this.handleVideoCamTouchTap.bind(this)}>
+                            <VideoCam/>
+                        </IconButton>
                         :
-                        <RaisedButton icon={<VideoCamOff/>} primary={true}
-                        onMouseUp={this.handleVideoCamTouchTap.bind(this)}/>
+                        <IconButton onMouseUp={this.handleVideoCamTouchTap.bind(this)}>
+                            <VideoCamOff/>
+                        </IconButton>
                     }
                     {broadcastMode === "OFF" ?
-                        <RaisedButton icon={<ScreenShare/>} primary={true}/>
+                        <IconButton >
+                            <ScreenShare/>
+                        </IconButton>
                         :
-                        <RaisedButton icon={<StopScreenShare/>} primary={true}/>
+                        <IconButton>
+                            <StopScreenShare/>
+                        </IconButton>
                     }
                 </ToolbarGroup>
             </Toolbar>
