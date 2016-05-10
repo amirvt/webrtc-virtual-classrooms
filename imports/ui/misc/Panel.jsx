@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 
 
-import AppBar from 'material-ui/lib/app-bar'
-import Paper from 'material-ui/lib/paper'
+import AppBar from 'material-ui/AppBar'
+import Paper from 'material-ui/Paper'
 
 
 class Panel extends Component {

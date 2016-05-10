@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react'
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import * as Colors from 'material-ui/lib/styles/colors';
-import Divider from 'material-ui/lib/divider'
+import {List, ListItem} from 'material-ui/List';
+import * as Colors from 'material-ui/styles/colors';
+import Divider from 'material-ui/Divider'
 
 class ChatMessages extends Component {
     render() {

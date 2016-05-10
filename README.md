@@ -7,7 +7,7 @@ and the [Licode WebRTC communications platform](http://lynckia.com/licode/).
 
 This project is still under heavy development. A working feature-complete prototype will be available by the end of August 2016.
 
-##Setting up a development Environment 
+##Setting up a development environment 
 
 1. Install a Licode server using the instructions at [http://lynckia.com/licode/install.html](http://lynckia.com/licode/install.html)
 2. install [meteor.js](https://www.meteor.com/install)

@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 
 import Panel from './misc/Panel.jsx'
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import CommunicationChatBubble from 'material-ui/lib/svg-icons/communication/chat-bubble';
+import {List, ListItem} from 'material-ui/List';
+import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
 
 class UserList extends Component {

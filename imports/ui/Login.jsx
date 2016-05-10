@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
-import TextField from 'material-ui/lib/text-field'
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField'
 import {connect} from 'react-redux'
 import { browserHistory } from 'react-router'
 import loginAction from '../actions/loginAction'

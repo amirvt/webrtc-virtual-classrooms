@@ -7,7 +7,7 @@ import ChatBox from './ChatBox'
 import MyToolBar from './MyToolBar'
 import Login from './Login.jsx'
 
-import getMuiTheme from 'material-ui/lib/styles/getMuiTheme'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 //import Snackbar from 'material-ui/Snackbar';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 var ReactGridLayout = require('react-grid-layout');
@@ -15,7 +15,7 @@ const RGL = WidthProvider(ReactGridLayout);
 
 
 import {connect} from 'react-redux';
-import * as Color from 'material-ui/lib/styles/colors'
+import * as Color from 'material-ui/styles/colors'
 import MyMuiTheme from '../MyMuiTheme'
 
 let mapStateToProps = (state) => {

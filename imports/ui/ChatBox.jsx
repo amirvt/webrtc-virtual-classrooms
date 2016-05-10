@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 
-import FloatingActionButton from 'material-ui/lib/floating-action-button'
-import ContentAdd from 'material-ui/lib/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
-import TextField from 'material-ui/lib/text-field'
+import TextField from 'material-ui/TextField'
 
-import Divider from 'material-ui/lib/divider'
+import Divider from 'material-ui/Divider'
 import Panel from './misc/Panel.jsx'
 import ChatMessages from './ChatMessages.jsx';
 
