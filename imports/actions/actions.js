@@ -1,4 +1,6 @@
 export const BROADCAST = {
     START_VIDEO : 'START_VIDEO',
-    TURN_OFF: 'TURN_OFF'
+    TURN_OFF: 'TURN_OFF',
+    RECEIVING: 'RECEIVING'
 };
+export const SET_TOKEN = "SET_TOKEN";

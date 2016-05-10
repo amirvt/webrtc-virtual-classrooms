@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 
 import Panel from './misc/Panel.jsx'
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import CommunicationChatBubble from 'material-ui/lib/svg-icons/communication/chat-bubble';
+import {List, ListItem} from 'material-ui/List';
+import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
 
 class UserList extends Component {
@@ -24,6 +23,7 @@ class UserList extends Component {
     renderUsers() {
         return this.getUsers().map(user => {
             return (
+
                 <ListItem primaryText={user.username}
                           rightIcon={<CommunicationChatBubble/>}/>
             )
@@ -32,10 +32,12 @@ class UserList extends Component {
 
     render() {
         return (
-            <Panel title="Current Users" style={{margin: "20px"}}>
-                <List style={{"overflowY": "scroll", height: "300px"}}>
-                    {this.renderUsers()}
-                </List>
+            <Panel title="Current Users" style={{margin: "0px"}}>
+                <div style={{"overflowY": "scroll", height: "80%"}}>
+                    <List >
+                        {this.renderUsers()}
+                    </List>
+                </div>
             </Panel>
         )
     }
