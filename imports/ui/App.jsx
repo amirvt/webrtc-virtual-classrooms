@@ -9,8 +9,10 @@ import Login from './Login.jsx'
 import {StreamType} from '../consts'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-//import Snackbar from 'material-ui/Snackbar';
 import {Responsive, WidthProvider} from 'react-grid-layout';
+import {BROADCAST} from "../actions/actions";
+import setVideoBroadcast from "../actions/setVideoBroadcast";
+
 var ReactGridLayout = require('react-grid-layout');
 const RGL = WidthProvider(ReactGridLayout);
 
@@ -113,8 +115,9 @@ class App extends Component {
 
         _room.addEventListener('stream-removed', streamEvent => {
             let stream = streamEvent.stream;
-            if (stream.elementID === 'video') {
+            if (stream.getAttributes().type === StreamType.VIDEO) {
                 stream.stop();
+                this.props.dispatch(setVideoBroadcast(BROADCAST.TURN_OFF))
             }
         });
     }

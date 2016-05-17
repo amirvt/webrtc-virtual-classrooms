@@ -14,11 +14,17 @@ class VideoBox extends Component {
     }
 
     componentDidUpdate() {
+        this.handleVideoModeProps();
+    }
+
+    handleVideoModeProps() {
         if (this.props.broadcastMode === "ON") {
             this.startBroadcastingVideo();
         } else if (this.props.broadcastMode === "OFF" && _broadcastStream) {
             _broadcastStream.stop();
             this.props.room.unpublish(_broadcastStream, (result, error) => {
+                if (!result)
+                    throw new Error(e);
                 _broadcastStream.close();
                 _broadcastStream = null;
             })
@@ -54,7 +60,6 @@ class VideoBox extends Component {
             let attributes = stream.getAttributes();
             if (attributes.type === videoType) {
                 stream.play(videoTag, {crop: true});
-                console.log("ayy lmao you fucked up!")
                 setBroadcast(BROADCAST.RECEIVING);
             }
         });

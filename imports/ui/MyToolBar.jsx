@@ -27,14 +27,26 @@ class MyToolBar extends Component {
     }
 
     videoCamButton() {
-        return this.props.broadcastMode === "OFF" ?
-            (<IconButton tooltip="start broadcasting video"  onTouchTap={this.handleVideoCamTouchTap.bind(this)}>
-                <VideoCam  />
-            </IconButton>) :
-            (<IconButton tooltip="stop broadcasting video"  onTouchTap={this.handleVideoCamTouchTap.bind(this)}>
-                <VideoCamOff  />
-            </IconButton>);
+        switch (this.props.broadcastMode) {
+            case "OFF":
+                return (
+                    <IconButton tooltip="start broadcasting video" onTouchTap={this.handleVideoCamTouchTap.bind(this)}>
+                        <VideoCam  />
+                    </IconButton> );
+            case "ON":
+                return (<IconButton tooltip="stop broadcasting video" onTouchTap={this.handleVideoCamTouchTap.bind(this)}>
+                    <VideoCamOff  />
+                </IconButton>);
+            case "RECEIVING":
+            default:
+                return (
+                    <IconButton  disabled={true}>
+                        <VideoCam  />
+                    </IconButton> );
+        }
+
     }
+
     screenShareButton() {
         return this.props.broadcastMode === "OFF" ?
             (<IconButton><ScreenShare/></IconButton>) :
