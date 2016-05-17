@@ -1,17 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux'
-import setVideoBroadcast from '../actions/setVideoBroadcast'
 
 import Panel from './misc/Panel.jsx'
-
-const mapStateToProps = (state) => {
-    return {
-        broadcastMode: state.broadcastMode,
-        username: state.loginReducer.username
-    }
-};
+import {BROADCAST} from "../actions/actions";
 
 let _broadcastStream;
+
 
 class VideoBox extends Component {
 
@@ -22,8 +15,8 @@ class VideoBox extends Component {
 
     componentDidUpdate() {
         if (this.props.broadcastMode === "ON") {
-            this.startBroadcastingWebCam();
-        } else if(this.props.broadcastMode === "OFF" && _broadcastStream) {
+            this.startBroadcastingVideo();
+        } else if (this.props.broadcastMode === "OFF" && _broadcastStream) {
             _broadcastStream.stop();
             this.props.room.unpublish(_broadcastStream, (result, error) => {
                 _broadcastStream.close();
@@ -32,22 +25,22 @@ class VideoBox extends Component {
         }
     }
 
-    startBroadcastingWebCam() {
+    startBroadcastingVideo() {
+        const {videoTag, videoType, streamProps, username} = this.props;
+
         _broadcastStream = Erizo.Stream({
-            audio: true,
-            video: true,
-            data: false,
+            ...streamProps,
             attributes: {
-                type: 'broadcastStream',
-                user: this.props.username
+                type: videoType,
+                user: username
             }
         });
         _broadcastStream.init();
         _broadcastStream.addEventListener('access-accepted', () => {
-            _broadcastStream.play('video', {crop: true})
+            _broadcastStream.play(videoTag, {crop: true})
         });
         _broadcastStream.addEventListener('access-denied', () => {
-            this.props.dispatch(setVideoBroadcast("OFF"))
+            this.props.setBroadcast(BROADCAST.TURN_OFF)
         });
 
         this.props.room.publish(_broadcastStream);
@@ -55,28 +48,34 @@ class VideoBox extends Component {
 
 
     addBroadcastListener() {
-        this.props.room.addEventListener('stream-subscribed', streamEvent => {
+        const {videoType, videoTag, setBroadcast, room} = this.props;
+        room.addEventListener('stream-subscribed', streamEvent => {
             let stream = streamEvent.stream;
             let attributes = stream.getAttributes();
-            if (attributes.type == 'broadcastStream') {
-                stream.play('video', {crop: true});
-                this.props.dispatch(setVideoBroadcast('RECEIVING'))
+            if (attributes.type === videoType) {
+                stream.play(videoTag, {crop: true});
+                console.log("ayy lmao you fucked up!")
+                setBroadcast(BROADCAST.RECEIVING);
             }
-                
         });
     }
 
     render() {
+        const {panelTitle, videoTag} = this.props;
         return (
-            <Panel title="Video" >
-                <div id="video" style={{height: "80%"}}></div>
+            <Panel title={panelTitle}>
+                <div id={videoTag} style={{height: "80%"}}></div>
             </Panel>
         )
     }
 }
 
 VideoBox.propTypes = {
-    room: PropTypes.object
+    room: PropTypes.object,
+    videoType: PropTypes.string,
+    videoTag: PropTypes.string,
+    panelTitle: PropTypes.string,
+    streamProps: PropTypes.object
 };
 
-export default connect(mapStateToProps)(VideoBox)
+export default VideoBox

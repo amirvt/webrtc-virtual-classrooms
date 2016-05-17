@@ -2,10 +2,11 @@ import React, {Component, PropTypes} from 'react'
 import {Meteor} from 'meteor/meteor'
 
 import UserList from './UserList'
-import VideoBox from './VideoBox'
+import WebCamBox from './WebCamBox.jsx'
 import ChatBox from './ChatBox'
 import MyToolBar from './MyToolBar'
 import Login from './Login.jsx'
+import {StreamType} from '../consts'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 //import Snackbar from 'material-ui/Snackbar';
@@ -15,7 +16,6 @@ const RGL = WidthProvider(ReactGridLayout);
 
 
 import {connect} from 'react-redux';
-import * as Color from 'material-ui/styles/colors'
 import MyMuiTheme from '../MyMuiTheme'
 
 let mapStateToProps = (state) => {
@@ -24,10 +24,6 @@ let mapStateToProps = (state) => {
         username: state.loginReducer.username,
         token: state.loginReducer.token
     }
-};
-
-let mapDispatchToProps = (dispatch) => {
-    return {}
 };
 
 let _room;
@@ -46,12 +42,12 @@ class App extends Component {
         for (stream of streams) {
             let attributes = stream.getAttributes();
             switch (attributes.type) {
-                case "broadcastStream":
+                case StreamType.VIDEO:
                     if (attributes.user !== this.props.username) {
                         room.subscribe(stream)
                     }
                     break;
-                case 'chatStream':
+                case StreamType.CHAT:
                     if (attributes.user !== this.props.username) {
                         room.subscribe(stream)
                     }
@@ -78,12 +74,9 @@ class App extends Component {
         ];
 
 
-        //let _style = {width: "33%", float: "left", height: "800px"}
         return (
             <div >
                 <MyToolBar/>
-
-
                 <RGL className="layout" layout={layout}
                      cols={12} rowHeight={50} width={1200}
                      isDraggable={false} isResizable={false}>
@@ -91,7 +84,7 @@ class App extends Component {
                         <UserList/>
                     </div>
                     <div key={"vb"} style={{backgroundColor: "grey"}}>
-                        <VideoBox room={_room}/>
+                        <WebCamBox room={_room}/>
                     </div>
                     <div key={"cb"} style={{backgroundColor: "grey"}}>
                         <ChatBox room={_room} username={this.props.username}/>
@@ -131,4 +124,4 @@ App.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps)(App)

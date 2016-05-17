@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
 import Panel from './misc/Panel.jsx'
 import ChatMessages from './ChatMessages.jsx';
+import {StreamType} from "../consts";
 
 
 let chatStream = {};
@@ -30,7 +31,7 @@ class ChatBox extends Component {
             video: false,
             data: true,
             screen: false,
-            attributes: {type: 'chatStream', user: this.props.username}
+            attributes: {type: StreamType.CHAT, user: this.props.username}
         });
         chatStream.init();
         this.props.room.addEventListener('room-connected', () => {
@@ -38,12 +39,12 @@ class ChatBox extends Component {
         });
 
 
-        //TODO move to app or move callback in app to video
+        
         this.props.room.addEventListener('stream-subscribed', streamEvent => {
             let stream = streamEvent.stream;
-            if (stream.getAttributes().type === 'chatStream') {
+            if (stream.getAttributes().type === StreamType.CHAT) {
                 stream.addEventListener('stream-data', event => {
-                    if (event.stream.getAttributes().type === 'chatStream') {
+                    if (event.stream.getAttributes().type === StreamType.CHAT) {
                         this.formatAndShowMessage(event.msg, stream.getAttributes().user);
                     }
                 });
@@ -88,7 +89,7 @@ class ChatBox extends Component {
                 </div>
                 <Divider/>
                 <div style={{padding: '30px', position: "absolute", bottom: 0, width: "90%"}}>
-                    <TextField multiLine={true} hintText="Start typing yout message" 
+                    <TextField multiLine={true} hintText="Start typing your message" 
                                onChange={this.onMessageType.bind(this)}
                                style={{width: "70%"}}/>
                     <FloatingActionButton mini={true}

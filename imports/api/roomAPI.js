@@ -9,7 +9,7 @@ import {Meteor} from 'meteor/meteor'
 Meteor.methods({
     'getOrCreateRoom'(roomName, userName, role) {
         if(!roomName || !userName || !role)
-            throw error();
+            throw error("incorrect parameters");
         
         var future = new Future();
 
@@ -32,8 +32,9 @@ Meteor.methods({
             }
         }, (e) => {future.throw(e)});
 
-        return future.wait();
-        
+        let result = future.wait();
+        console.log(result);
+        return result;
 
     }
 });

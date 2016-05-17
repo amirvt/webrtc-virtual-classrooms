@@ -3,4 +3,3 @@ export const BROADCAST = {
     TURN_OFF: 'TURN_OFF',
     RECEIVING: 'RECEIVING'
 };
-export const SET_TOKEN = "SET_TOKEN";
