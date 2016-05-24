@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 
 import Panel from './misc/Panel.jsx'
-import {BROADCAST} from "../actions/actions";
 
 let _broadcastStream;
-
 
 class VideoBox extends Component {
 
@@ -18,9 +16,9 @@ class VideoBox extends Component {
     }
 
     handleVideoModeProps() {
-        if (this.props.broadcastMode === "ON") {
+        if (this.props.videoMode === "ON") {
             this.startBroadcastingVideo();
-        } else if (this.props.broadcastMode === "OFF" && _broadcastStream) {
+        } else if (this.props.videoMode === "OFF" && _broadcastStream) {
             _broadcastStream.stop();
             this.props.room.unpublish(_broadcastStream, (result, error) => {
                 if (!result)
@@ -45,8 +43,10 @@ class VideoBox extends Component {
         _broadcastStream.addEventListener('access-accepted', () => {
             _broadcastStream.play(videoTag, {crop: true})
         });
-        _broadcastStream.addEventListener('access-denied', () => {
-            this.props.setBroadcast(BROADCAST.TURN_OFF)
+        _broadcastStream.addEventListener('access-denied', (event) => {
+            alert("access denied");
+            console.log(event);
+            this.props.dispatchOff()
         });
 
         this.props.room.publish(_broadcastStream);
@@ -54,13 +54,13 @@ class VideoBox extends Component {
 
 
     addBroadcastListener() {
-        const {videoType, videoTag, setBroadcast, room} = this.props;
+        const {videoType, videoTag, dispatchRecv, room} = this.props;
         room.addEventListener('stream-subscribed', streamEvent => {
             let stream = streamEvent.stream;
             let attributes = stream.getAttributes();
             if (attributes.type === videoType) {
                 stream.play(videoTag, {crop: true});
-                setBroadcast(BROADCAST.RECEIVING);
+                dispatchRecv();
             }
         });
     }

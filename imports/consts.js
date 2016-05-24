@@ -3,3 +3,9 @@ export const StreamType = {
     SCREEN_CAST: "SCREEN_CAST",
     CHAT: "CHAT"
 };
+
+export const VideoStreamMode = {
+    ON: "ON",
+    OFF: "OFF",
+    RECV: "RECV"
+};

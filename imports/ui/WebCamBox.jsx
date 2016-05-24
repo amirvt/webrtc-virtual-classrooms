@@ -1,20 +1,20 @@
-//import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {BROADCAST} from '../actions/actions'
-import setVideoBroadcast from '../actions/setVideoBroadcast'
+import createWebCamAction from '../actions/createWebCamAction'
 import VideoBox from './VideoBox.jsx'
 import {StreamType} from '../consts'
+import {WebCamAction} from "../actions/actions";
 
 const mapStateToProps = (state) => {
     return {
-        broadcastMode: state.broadcastMode,
+        videoMode: state.webCamMode,
         username: state.loginReducer.username
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        setBroadcast: (mode) => dispatch(setVideoBroadcast(mode))
+        dispatchRecv: () => dispatch(createWebCamAction(WebCamAction.RECV)),
+        dispatchOff: () => dispatch(createWebCamAction(WebCamAction.OFF))
     }
 };
 

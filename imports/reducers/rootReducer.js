@@ -1,9 +1,11 @@
 import {combineReducers} from 'redux';
-import broadcastMode from './broadcastMode';
+import webCamMode from './videoCamReducer';
+import screenCamMode from './screenCamReducer'
 import loginReducer from './loginReducer'
 
 const rootReducer = combineReducers({
-    broadcastMode,
+    webCamMode,
+    screenCamMode,
     loginReducer
 });
 

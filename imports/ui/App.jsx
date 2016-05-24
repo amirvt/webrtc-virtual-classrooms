@@ -1,24 +1,24 @@
 import React, {Component, PropTypes} from 'react'
-import {Meteor} from 'meteor/meteor'
 
 import UserList from './UserList'
 import WebCamBox from './WebCamBox.jsx'
+import ScreenCamBox from './ScreenCamBox'
 import ChatBox from './ChatBox'
 import MyToolBar from './MyToolBar'
 import Login from './Login.jsx'
 import {StreamType} from '../consts'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import {Responsive, WidthProvider} from 'react-grid-layout';
-import {BROADCAST} from "../actions/actions";
-import setVideoBroadcast from "../actions/setVideoBroadcast";
+import {WidthProvider} from 'react-grid-layout';
+import {WebCamAction} from "../actions/actions";
+import setVideoBroadcast from "../actions/createWebCamAction";
 
 var ReactGridLayout = require('react-grid-layout');
 const RGL = WidthProvider(ReactGridLayout);
 
 
 import {connect} from 'react-redux';
-import MyMuiTheme from '../MyMuiTheme'
+//import MyMuiTheme from '../MyMuiTheme'
 
 let mapStateToProps = (state) => {
     return {
@@ -43,20 +43,8 @@ class App extends Component {
     subscribeToStreams(room, streams) {
         for (stream of streams) {
             let attributes = stream.getAttributes();
-            switch (attributes.type) {
-                case StreamType.VIDEO:
-                    if (attributes.user !== this.props.username) {
-                        room.subscribe(stream)
-                    }
-                    break;
-                case StreamType.CHAT:
-                    if (attributes.user !== this.props.username) {
-                        room.subscribe(stream)
-                    }
-                    break;
-                default:
-                    console.error('incorrect room type: ' + attributes.type);
-                    break;
+            if (attributes.user !== this.props.username) {
+                room.subscribe(stream)
             }
         }
     }
@@ -70,7 +58,7 @@ class App extends Component {
 
         var layout = [
             {i: 'ul', x: 0, y: 0, w: 4, h: 6},
-            {i: 'vb', x: 0, y: 6, w: 4, h: 6},
+            {i: 'wb', x: 0, y: 6, w: 4, h: 6},
             {i: 'sb', x: 4, y: 0, w: 4, h: 12},
             {i: 'cb', x: 8, y: 0, w: 4, h: 12}
         ];
@@ -82,17 +70,17 @@ class App extends Component {
                 <RGL className="layout" layout={layout}
                      cols={12} rowHeight={50} width={1200}
                      isDraggable={false} isResizable={false}>
-                    <div key={"ul"} style={{backgroundColor: "grey"}}>
+                    <div key={"ul"} >
                         <UserList/>
                     </div>
-                    <div key={"vb"} style={{backgroundColor: "grey"}}>
+                    <div key={"wb"} >
                         <WebCamBox room={_room}/>
                     </div>
-                    <div key={"cb"} style={{backgroundColor: "grey"}}>
+                    <div key={"cb"} >
                         <ChatBox room={_room} username={this.props.username}/>
                     </div>
-                    <div key={"sb"} style={{backgroundColor: "grey"}}>
-
+                    <div key={"sb"} >
+                        <ScreenCamBox room={_room}/>
                     </div>
                 </RGL>
             </div>
@@ -117,7 +105,7 @@ class App extends Component {
             let stream = streamEvent.stream;
             if (stream.getAttributes().type === StreamType.VIDEO) {
                 stream.stop();
-                this.props.dispatch(setVideoBroadcast(BROADCAST.TURN_OFF))
+                this.props.dispatch(setVideoBroadcast(WebCamAction.OFF))
             }
         });
     }

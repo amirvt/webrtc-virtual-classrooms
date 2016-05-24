@@ -1,14 +1,14 @@
-import {BROADCAST} from '../actions/actions'
+import {WebCamAction} from '../actions/actions'
 /**
  * @return {string}
  */
 export default function broadcastMode(state = 'OFF', action){
     switch (action.type) {
-        case BROADCAST.START_VIDEO:
+        case WebCamAction.START:
             return 'ON';
-        case BROADCAST.RECEIVING:
-            return 'RECEIVING';
-        case BROADCAST.TURN_OFF:
+        case WebCamAction.RECV:
+            return 'RECV';
+        case WebCamAction.OFF:
         default:
             return 'OFF';
     }
