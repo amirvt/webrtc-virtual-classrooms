@@ -9,7 +9,9 @@ export default function broadcastMode(state = 'OFF', action){
         case WebCamAction.RECV:
             return 'RECV';
         case WebCamAction.OFF:
-        default:
             return 'OFF';
+        default:
+            return state;
+
     }
 }

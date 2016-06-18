@@ -6,8 +6,10 @@ export default function(state = "OFF", action) {
         case ScreenCamAction.RECV:
             return "RECV";
         case ScreenCamAction.OFF:
-        default:
             return "OFF";
+        default:
+            return state;
+
     }
 }
 

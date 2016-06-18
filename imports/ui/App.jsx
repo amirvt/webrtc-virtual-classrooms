@@ -11,7 +11,8 @@ import {StreamType} from '../consts'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {WidthProvider} from 'react-grid-layout';
 import {WebCamAction} from "../actions/actions";
-import setVideoBroadcast from "../actions/createWebCamAction";
+import createWebCamAction from "../actions/createWebCamAction";
+import {ScreenCamAction} from "../actions/actions";
 
 var ReactGridLayout = require('react-grid-layout');
 const RGL = WidthProvider(ReactGridLayout);
@@ -29,6 +30,7 @@ let mapStateToProps = (state) => {
 };
 
 let _room;
+
 class App extends Component {
 
 
@@ -48,8 +50,7 @@ class App extends Component {
             }
         }
     }
-
-
+    
     render() {
         if (!this.props.username || !this.props.roomName) {
             return <Login/>
@@ -70,16 +71,16 @@ class App extends Component {
                 <RGL className="layout" layout={layout}
                      cols={12} rowHeight={50} width={1200}
                      isDraggable={false} isResizable={false}>
-                    <div key={"ul"} >
+                    <div key={"ul"}>
                         <UserList/>
                     </div>
-                    <div key={"wb"} >
+                    <div key={"wb"}>
                         <WebCamBox room={_room}/>
                     </div>
-                    <div key={"cb"} >
+                    <div key={"cb"}>
                         <ChatBox room={_room} username={this.props.username}/>
                     </div>
-                    <div key={"sb"} >
+                    <div key={"sb"}>
                         <ScreenCamBox room={_room}/>
                     </div>
                 </RGL>
@@ -103,9 +104,12 @@ class App extends Component {
 
         _room.addEventListener('stream-removed', streamEvent => {
             let stream = streamEvent.stream;
+            //TODO generalize
             if (stream.getAttributes().type === StreamType.VIDEO) {
                 stream.stop();
-                this.props.dispatch(setVideoBroadcast(WebCamAction.OFF))
+                this.props.dispatch(createWebCamAction(WebCamAction.OFF))
+            } else if (stream.getAttributes().type === StreamType.SCREEN_CAST) {
+                this.props.dispatch(createScreenCamAction(ScreenCamAction.OFF))
             }
         });
     }

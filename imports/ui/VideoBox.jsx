@@ -2,13 +2,14 @@ import React, {Component, PropTypes} from 'react'
 
 import Panel from './misc/Panel.jsx'
 
-let _broadcastStream;
+
 
 class VideoBox extends Component {
 
     constructor(props) {
         super(props);
-        this.addBroadcastListener()
+        this.addBroadcastListener();
+        this._broadcastStream = null;
     }
 
     componentDidUpdate() {
@@ -16,40 +17,39 @@ class VideoBox extends Component {
     }
 
     handleVideoModeProps() {
+        debugger;
         if (this.props.videoMode === "ON") {
             this.startBroadcastingVideo();
-        } else if (this.props.videoMode === "OFF" && _broadcastStream) {
-            _broadcastStream.stop();
-            this.props.room.unpublish(_broadcastStream, (result, error) => {
-                if (!result)
-                    throw new Error(e);
-                _broadcastStream.close();
-                _broadcastStream = null;
-            })
+        } else if (this.props.videoMode === "OFF" && this._broadcastSream) {
+                this._broadcastSream.stop();
+                this._broadcastSream.close();
+                this._broadcastSream = null;
         }
     }
 
     startBroadcastingVideo() {
         const {videoTag, videoType, streamProps, username} = this.props;
 
-        _broadcastStream = Erizo.Stream({
+        this._broadcastSream = Erizo.Stream({
             ...streamProps,
             attributes: {
                 type: videoType,
                 user: username
             }
         });
-        _broadcastStream.init();
-        _broadcastStream.addEventListener('access-accepted', () => {
-            _broadcastStream.play(videoTag, {crop: true})
+        this._broadcastSream.init();
+        this._broadcastSream.addEventListener('access-accepted', () => {
+            this._broadcastSream.play(videoTag, {crop: true});
+            //TODO should this go inside access-accepted callback?
+            this.props.room.publish(this._broadcastSream);
         });
-        _broadcastStream.addEventListener('access-denied', (event) => {
+        this._broadcastSream.addEventListener('access-denied', (event) => {
             alert("access denied");
             console.log(event);
             this.props.dispatchOff()
         });
 
-        this.props.room.publish(_broadcastStream);
+
     }
 
 
