@@ -18,21 +18,10 @@ This project is still under heavy development. A working feature-complete protot
 
 ##Setting up https
 
-You'll need this to be able to use screen capturing.
 
-Below is a quick fix method to get your app running in https.
+###Setting up https for the Licode server
 
-1. Create an ssl certificate and key in the private directory
-2. Run `git clone https://github.com/Tarang/Meteor-SSL-proxy.git` outside the project
-3. `cd Meteor-SSL-proxy`
-4. Edit `PATH_to_KEY` and `PATH_TO_CERT` in main.js to point to your key and certificate
-5. Comment `PATH_TO_CHAIN` and `ca : fs.readFileSync(PATH_TO_CHAIN, 'utf8')`
-6. Set `target` to http://localhost:8888
-7. Run main.js with forever or something
-
-Since https won't let you make requests to http urls, you'll need to set your Licode server to https as well.
-
-
+You'll need to do this to be able to use screen capturing.
 
 Open `licode/scripts/licode_default.js`
 Change the settings as below:
@@ -52,3 +41,15 @@ config.erizoController.listen_port = 8443; //default value: 8080
 ```
 
 Finally, replace both cert.pem and key.pem in /cert directory with your own cert files. 
+
+###Setting up https for the app
+
+Below is a quick fix method to get your app running in https.
+
+1. Create an ssl certificate and key in the private directory
+2. Run `git clone https://github.com/Tarang/Meteor-SSL-proxy.git` outside the project
+3. `cd Meteor-SSL-proxy`
+4. Edit `PATH_to_KEY` and `PATH_TO_CERT` in main.js to point to your key and certificate
+5. Comment `PATH_TO_CHAIN` and `ca : fs.readFileSync(PATH_TO_CHAIN, 'utf8')`
+6. Set `target` to http://localhost:8888
+7. Run main.js with forever or something
