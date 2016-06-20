@@ -5,9 +5,11 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "literallycanvas": "latest",
     "material-ui": "^0.15.0",
     "meteor-node-stubs": "~0.2.0",
     "react": "^15.0.2",
+    "react-addons-pure-render-mixin": "^15.1.0",
     "react-dom": "^15.0.2",
     "react-grid-layout": "^0.12.3",
     "react-redux": "^4.4.5",

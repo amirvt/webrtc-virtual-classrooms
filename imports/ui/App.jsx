@@ -12,6 +12,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {WidthProvider} from 'react-grid-layout';
 import {WebCamAction} from "../actions/actions";
 import createWebCamAction from "../actions/createWebCamAction";
+import Whiteboard from './Whiteboard';
 import {ScreenCamAction} from "../actions/actions";
 
 var ReactGridLayout = require('react-grid-layout');
@@ -50,7 +51,7 @@ class App extends Component {
             }
         }
     }
-    
+
     render() {
         if (!this.props.username || !this.props.roomName) {
             return <Login/>
@@ -81,7 +82,8 @@ class App extends Component {
                         <ChatBox room={_room} username={this.props.username}/>
                     </div>
                     <div key={"sb"}>
-                        <ScreenCamBox room={_room}/>
+                        {/* <ScreenCamBox room={_room}/> */}
+                        <Whiteboard/>
                     </div>
                 </RGL>
             </div>

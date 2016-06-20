@@ -17,7 +17,6 @@ class VideoBox extends Component {
     }
 
     handleVideoModeProps() {
-        debugger;
         if (this.props.videoMode === "ON") {
             this.startBroadcastingVideo();
         } else if (this.props.videoMode === "OFF" && this._broadcastSream) {
