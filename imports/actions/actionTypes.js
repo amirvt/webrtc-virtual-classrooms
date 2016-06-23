@@ -13,3 +13,7 @@ export const WhiteboardAction = {
     OFF: "WB_OFF",
     RECV: "WB_RECV"
 };
+export const UserAction = {
+    ADD: "USER_ADD",
+    REMOVE: "USER_REMOVE"
+};

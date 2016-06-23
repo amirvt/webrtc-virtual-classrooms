@@ -3,25 +3,18 @@ import React, {Component} from 'react'
 import Panel from './misc/Panel.jsx'
 import {List, ListItem} from 'material-ui/List';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
+import {connect} from 'react-redux'
 
+
+const mapStateToProps = state => ({
+   users: state.users
+});
 
 class UserList extends Component {
-    getUsers() {
-        return [
-            {username: "Eric Hoffman"},
-            {username: "Grace Ng"},
-            {username: "Karem Suer"},
-            {username: "Asghar Gholami"},
-            {username: "Eric Hoffman"},
-            {username: "Grace Ng"},
-            {username: "Karem Suer"},
-            {username: "Asghar Gholami"},
-        ]
-    }
 
 
     renderUsers() {
-        return this.getUsers().map(user => {
+        return this.props.users.map(user => {
             return (
 
                 <ListItem primaryText={user.username}
@@ -43,4 +36,4 @@ class UserList extends Component {
     }
 }
 
-export default UserList
+export default connect(mapStateToProps)(UserList)

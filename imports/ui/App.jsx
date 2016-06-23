@@ -14,6 +14,7 @@ import {WebCamAction} from "../actions/actionTypes";
 import createWebCamAction from "../actions/createWebCamAction";
 import Whiteboard from './Whiteboard';
 import {ScreenCamAction} from "../actions/actionTypes";
+import {UserAction} from "../actions/actionTypes";
 
 var ReactGridLayout = require('react-grid-layout');
 const RGL = WidthProvider(ReactGridLayout);
@@ -29,6 +30,12 @@ let mapStateToProps = (state) => {
         token: state.loginReducer.token
     }
 };
+
+let mapDispatchToProps = dispatch => ({
+    addUser: username => dispatch({type: UserAction.ADD, user: {username}}),
+    removeUser: username => dispatch({type: UserAction.REMOVE, user: {username}}),
+    dispatch
+});
 
 let _room;
 
@@ -47,6 +54,7 @@ class App extends Component {
         for (stream of streams) {
             let attributes = stream.getAttributes();
             if (attributes.user !== this.props.username) {
+                this.props.addUser( attributes.user);
                 room.subscribe(stream)
             }
         }
@@ -113,6 +121,8 @@ class App extends Component {
                 this.props.dispatch(createWebCamAction(WebCamAction.OFF))
             } else if (stream.getAttributes().type === StreamType.SCREEN_CAST) {
                 this.props.dispatch(createScreenCamAction(ScreenCamAction.OFF))
+            } else if (stream.getAttributes().type === StreamType.CHAT) {
+                this.props.removeUser(stream.getAttributes().user)
             }
         });
     }
@@ -122,4 +132,4 @@ App.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
