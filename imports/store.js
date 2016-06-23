@@ -1,7 +1,11 @@
-import { applyMiddleware, createStore } from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import ReduxThunk from 'redux-thunk';
+import createLogger from 'redux-logger'
 import rootReducer from './reducers/rootReducer';
 
-const Store = createStore(rootReducer, {}, applyMiddleware(ReduxThunk));
+const loggerMiddleware = createLogger();
+
+const Store = createStore(rootReducer, {}, applyMiddleware(ReduxThunk, loggerMiddleware),
+    window.devToolsExtension ? window.devToolsExtension() : f => f);
 
 export default Store;

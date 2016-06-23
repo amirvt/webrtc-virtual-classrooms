@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import createWebCamAction from '../actions/createWebCamAction'
 import VideoBox from './VideoBox.jsx'
 import {StreamType} from '../consts'
-import {WebCamAction} from "../actions/actions";
+import {WebCamAction} from "../actions/actionTypes";
 
 const mapStateToProps = (state) => {
     return {

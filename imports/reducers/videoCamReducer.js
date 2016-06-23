@@ -1,4 +1,4 @@
-import {WebCamAction} from '../actions/actions'
+import {WebCamAction} from '../actions/actionTypes'
 /**
  * @return {string}
  */

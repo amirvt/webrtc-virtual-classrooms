@@ -8,14 +8,17 @@ import VideoCam from 'material-ui/svg-icons/av/videocam';
 import VideoCamOff from 'material-ui/svg-icons/av/videocam-off';
 import ScreenShare from 'material-ui/svg-icons/communication/screen-share';
 import StopScreenShare from 'material-ui/svg-icons/communication/stop-screen-share';
-import {WebCamAction} from "../actions/actions";
+import {WebCamAction} from "../actions/actionTypes";
 import createScreenCamAction from "../actions/createScreenCamAction";
-import {ScreenCamAction} from "../actions/actions";
+import {ScreenCamAction} from "../actions/actionTypes";
+import {WhiteboardAction} from "../actions/actionTypes";
+import SlideShow from 'material-ui/svg-icons/image/slideshow'
 
 const mapStateToProps = state => {
     return {
         webCamMode: state.webCamMode,
-        screenCamMode: state.screenCamMode
+        screenCamMode: state.screenCamMode,
+        whiteboardMode: state.whiteboardMode
     }
 };
 
@@ -37,6 +40,15 @@ class MyToolBar extends Component {
             dispatch(createScreenCamAction(ScreenCamAction.START));
         else if (screenCamMode === "ON")
             dispatch(createScreenCamAction(ScreenCamAction.OFF));
+    }
+
+    handleWhiteboardTouchTap(event){
+        event.preventDefault();
+        const {whiteboardMode, dispatch} = this.props;
+        if (whiteboardMode === "OFF")
+            dispatch({type: WhiteboardAction.START});
+        else if (whiteboardMode === "ON")
+            dispatch({type: WhiteboardAction.OFF});
     }
 
     webCamButton() {
@@ -82,6 +94,27 @@ class MyToolBar extends Component {
         }
     }
 
+    presentationButton() {
+        switch (this.props.whiteboardMode) {
+            case "OFF":
+                return (
+                    <IconButton tooltip="start presentation" onTouchTap={this.handleWhiteboardTouchTap.bind(this)}>
+                        <SlideShow  />
+                    </IconButton> );
+            case "ON":
+                return (
+                    <IconButton onTouchTap={this.handleWhiteboardTouchTap.bind(this)}>
+                        <SlideShow  />
+                    </IconButton>);
+            case "RECV":
+            default:
+                return (
+                    <IconButton disabled={true}>
+                        <SlideShow  />
+                    </IconButton> );
+        }
+    }
+
     render() {
 
         return (
@@ -89,10 +122,12 @@ class MyToolBar extends Component {
                 <ToolbarGroup firstChild={true} float="left">
                     {this.webCamButton()}
                     {this.screenShareButton()}
+                    {this.presentationButton()}
                 </ToolbarGroup>
             </Toolbar>
         )
     }
+
 
 }
 

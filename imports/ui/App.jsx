@@ -10,10 +10,10 @@ import {StreamType} from '../consts'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {WidthProvider} from 'react-grid-layout';
-import {WebCamAction} from "../actions/actions";
+import {WebCamAction} from "../actions/actionTypes";
 import createWebCamAction from "../actions/createWebCamAction";
 import Whiteboard from './Whiteboard';
-import {ScreenCamAction} from "../actions/actions";
+import {ScreenCamAction} from "../actions/actionTypes";
 
 var ReactGridLayout = require('react-grid-layout');
 const RGL = WidthProvider(ReactGridLayout);
@@ -54,6 +54,7 @@ class App extends Component {
 
     render() {
         if (!this.props.username || !this.props.roomName) {
+            console.log("no username or password");
             return <Login/>
         }
         this.setupRoom();
@@ -83,7 +84,7 @@ class App extends Component {
                     </div>
                     <div key={"sb"}>
                         {/* <ScreenCamBox room={_room}/> */}
-                        <Whiteboard/>
+                        <Whiteboard  />
                     </div>
                 </RGL>
             </div>

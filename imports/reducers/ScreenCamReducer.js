@@ -1,4 +1,4 @@
-import {ScreenCamAction} from "../actions/actions";
+import {ScreenCamAction} from "../actions/actionTypes";
 export default function(state = "OFF", action) {
     switch(action.type) {
         case ScreenCamAction.START:
