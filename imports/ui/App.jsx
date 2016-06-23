@@ -12,6 +12,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import {WidthProvider} from 'react-grid-layout';
 import {WebCamAction} from "../actions/actionTypes";
 import createWebCamAction from "../actions/createWebCamAction";
+import createScreenCamAction from "../actions/createScreenCamAction";
 import Whiteboard from './Whiteboard';
 import {ScreenCamAction} from "../actions/actionTypes";
 import {UserAction} from "../actions/actionTypes";
