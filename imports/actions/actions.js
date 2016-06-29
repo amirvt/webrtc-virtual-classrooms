@@ -2,9 +2,9 @@
 
 import {Meteor} from 'meteor/meteor'
 
-export const setSnapshotAction = (roomName, slideNumber, snapShot) => {
+export const setSnapshotAction = (username, roomName, slideNumber, snapShot) => {
     return () => {
-        Meteor.call('shapes.setSnapshot', {roomName, slideNumber, snapShot}, (err, res) => {
+        Meteor.call('shapes.setSnapshot', {username, roomName, slideNumber, snapShot}, (err, res) => {
             if (err) {
                 //TODO dispatch error
             } else {

@@ -7,7 +7,7 @@ import {Shapes} from '../api/shapesApi'
 
 const mapDispatchToProps = dispatch => {
     return {
-        dispatchSnapshotAction: (roomName, slideNumber, snapshot) => dispatch(setSnapshotAction(roomName, slideNumber, snapshot))
+        dispatchSnapshotAction: (username, roomName, slideNumber, snapshot) => dispatch(setSnapshotAction(username, roomName, slideNumber, snapshot))
     }
 };
 
@@ -25,33 +25,47 @@ import {connect} from 'react-redux'
 class Whiteboard extends Component {
     constructor(props) {
         super(props);
-        this._drawChangeCallbackUnSubscribe = () => {};
+        this._drawChangeCallbackUnSubscribe = () => {
+        };
     }
 
+    canvasUnSub(){
+        this._drawChangeCallbackUnSubscribe();
+    }
+    canvasSub(props){
+        let {mode, roomName, username, dispatchSnapshotAction, subscriptions} = props;
+        this._drawChangeCallbackUnSubscribe = this._lc.on('drawingChange', () => {
+            dispatchSnapshotAction(username, roomName, 1, JSON.stringify(this._lc.getSnapshot()));
+        });
+    }
 
     render() {
         console.log("wb rendered");
-        let {mode, roomName, username, dispatchSnapshotAction, subscriptions} = this.props ;
-        if (this._lc) {
-            this._drawChangeCallbackUnSubscribe();
-            if (mode == "ON") {
-                this._drawChangeCallbackUnSubscribe = this._lc.on('drawingChange', () => {
-                    dispatchSnapshotAction(roomName, 1, JSON.stringify(this._lc.getSnapshot()));
-                })
-            } else if (subscriptions.roomSnapshots) {
-                let shapeCursor = Shapes.find({roomName, slideNumber: 1});
-                shapeCursor.observeChanges({
-                    added: (id, fields) => {
-                        console.log("added");
-                        this._lc.loadSnapshot(JSON.parse(fields.snapShot));
-                    },
-                    changed: (id, fields) => {
-                        console.log("changed");
-                        this._lc.loadSnapshot(JSON.parse(fields.snapShot));
-                    }
-                })
 
-            }
+        //TODO this is a ruddy mess
+        let {roomName, username} = this.props;
+        if (this._lc) {
+            this.canvasUnSub();
+            this.canvasSub(this.props);
+            let shapeCursor = Shapes.find({roomName, slideNumber: 1});
+            shapeCursor.observeChanges({
+                added: (id, fields) => {
+                    console.log("added");
+                    this.canvasUnSub();
+                    this._lc.loadSnapshot(JSON.parse(fields.snapShot));
+                    this.canvasSub(this.props);
+                },
+                changed: (id, fields) => {
+                    console.log("changed");
+                    if (fields.username !== username) {
+                        this.canvasUnSub();
+                        this._lc.loadSnapshot(JSON.parse(fields.snapShot));
+                        this.canvasSub(this.props)
+                    }
+
+                }
+            })
+
         }
         return <LC.LiterallyCanvasReactComponent
             imageURLPrefix="/lc/img"

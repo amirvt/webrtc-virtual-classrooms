@@ -26,8 +26,8 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-    'shapes.setSnapshot'({roomName, slideNumber, snapShot}) {
-
+    'shapes.setSnapshot'({username, roomName, slideNumber, snapShot}) {
+        check(username, String);
         check(roomName, String);
         check(slideNumber, Number);
         check(snapShot, String);
@@ -39,9 +39,9 @@ Meteor.methods({
         };
 
         if (doc) {
-            Shapes.update({_id: doc._id}, {$set: {snapShot}}, handleError);
+            Shapes.update({_id: doc._id}, {$set: {username, snapShot}}, handleError);
         } else {
-            Shapes.insert({roomName, slideNumber, snapShot, handleError});
+            Shapes.insert({username, roomName, slideNumber, snapShot, handleError});
         }
     }
 });
