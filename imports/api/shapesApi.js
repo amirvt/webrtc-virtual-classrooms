@@ -13,9 +13,7 @@ Shapes.publicFields = {roomName: 1, slideNumber: 1, snapShot: 1};
 
 if (Meteor.isServer) {
     Meteor.publish('roomSnapshots', function (roomName) {
-        new SimpleSchema({
-            roomId: {type: String}
-        }).validate({roomName});
+        check(roomName, String);
 
 
         return Shapes.find({
@@ -29,8 +27,6 @@ if (Meteor.isServer) {
 
 Meteor.methods({
     'shapes.setSnapshot'({roomName, slideNumber, snapShot}) {
-        console.log("!!!!!!!!!!!!!!");
-        console.log(snapShot);
 
         check(roomName, String);
         check(slideNumber, Number);

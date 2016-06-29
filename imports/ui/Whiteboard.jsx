@@ -2,10 +2,8 @@ import LC from 'literallycanvas'
 import React, {Component} from 'react'
 import {setSnapshotAction} from '../actions/actions'
 import subscribe from 'react-meteor-subscribe';
-
-let mapSubsToProps = props => ({
-    roomSnapshots: [props.roomName]
-});
+import {createContainer} from 'meteor/react-meteor-data'
+import {Shapes} from '../api/shapesApi'
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -32,13 +30,27 @@ class Whiteboard extends Component {
 
 
     render() {
-        let {mode, roomName, username, dispatchSnapshotAction} = this.props ;
+        console.log("wb rendered");
+        let {mode, roomName, username, dispatchSnapshotAction, subscriptions} = this.props ;
         if (this._lc) {
             this._drawChangeCallbackUnSubscribe();
             if (mode == "ON") {
                 this._drawChangeCallbackUnSubscribe = this._lc.on('drawingChange', () => {
                     dispatchSnapshotAction(roomName, 1, JSON.stringify(this._lc.getSnapshot()));
                 })
+            } else if (subscriptions.roomSnapshots) {
+                let shapeCursor = Shapes.find({roomName, slideNumber: 1});
+                shapeCursor.observeChanges({
+                    added: (id, fields) => {
+                        console.log("added");
+                        this._lc.loadSnapshot(JSON.parse(fields.snapShot));
+                    },
+                    changed: (id, fields) => {
+                        console.log("changed");
+                        this._lc.loadSnapshot(JSON.parse(fields.snapShot));
+                    }
+                })
+
             }
         }
         return <LC.LiterallyCanvasReactComponent
@@ -50,5 +62,17 @@ class Whiteboard extends Component {
     }
 }
 
+let mapSubsToProps = props => ({
+    roomSnapshots: [props.roomName]
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Whiteboard)
+
+// let x =  connect(mapStateToProps, mapDispatchToProps)(Whiteboard)
+// export default createContainer(() => {
+//     let handle = Meteor.subscribe('roomSnapshots', this.props.roomName);
+//     return {
+//         snapshotReady: handle.ready
+//     }
+// }, x);
+
+export default connect(mapStateToProps, mapDispatchToProps)(subscribe(mapSubsToProps)(Whiteboard))
