@@ -13,6 +13,7 @@ import createScreenCamAction from "../actions/createScreenCamAction";
 import {ScreenCamAction} from "../actions/actionTypes";
 import {WhiteboardAction} from "../actions/actionTypes";
 import SlideShow from 'material-ui/svg-icons/image/slideshow'
+import FileUpload from 'material-ui/svg-icons/file/file-upload'
 
 const mapStateToProps = state => {
     return {
@@ -42,7 +43,7 @@ class MyToolBar extends Component {
             dispatch(createScreenCamAction(ScreenCamAction.OFF));
     }
 
-    handleWhiteboardTouchTap(event){
+    handleWhiteboardTouchTap(event) {
         event.preventDefault();
         const {whiteboardMode, dispatch} = this.props;
         if (whiteboardMode === "OFF")
@@ -115,6 +116,38 @@ class MyToolBar extends Component {
         }
     }
 
+
+    _fileUploaded(event){
+        var file = this.files[0];
+        var reader = new window.FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event, text) => {
+
+        };
+        var chunkLength = 1000;
+    }
+
+
+    uploadButton() {
+        return (
+            <span>
+                <IconButton
+                    label="Upload file"
+                    onTouchTap={() => {
+                        this._fileInput.click();
+                    }}>
+                    <FileUpload/>
+                </IconButton>
+                <input
+                    ref={(node) => {this._fileInput = node}}
+                    type="file"
+                    style={{"display" : "none"}}
+                    onChange={this._fileUploaded.bind(this)}/>
+            </span>
+        )
+    }
+
+
     render() {
 
         return (
@@ -123,6 +156,7 @@ class MyToolBar extends Component {
                     {this.webCamButton()}
                     {this.screenShareButton()}
                     {this.presentationButton()}
+                    {this.uploadButton()}
                 </ToolbarGroup>
             </Toolbar>
         )

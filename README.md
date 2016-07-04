@@ -1,4 +1,6 @@
-#WebRTC Virtual Classrooms
+#WebRTC Virtual Classrooms - DEPRECATED
+
+see [this project](https://github.com/amirvt/webrtc-online-classrooms) for a more elegant non meteor version
 
 
 A Small Project that leverages the Licode WebRTC communications platform to create virtual classrooms using the relatively new WebRTC standard.
